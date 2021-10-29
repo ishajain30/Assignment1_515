@@ -1,0 +1,55 @@
+---
+title: "ANA 515 Assignment 1"
+author: "Isha Jain"
+date: "10/27/2021"
+output: 
+  html_document:
+    theme:
+      bootswatch: "cerulean"
+  
+---
+
+
+```{r setup, include=FALSE}
+library(bslib)
+library(tidyverse)
+library(knitr)
+```
+
+
+```{r dataload, include=FALSE, message=FALSE, warning=FALSE}
+##get dataset
+url <- "https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv"
+gun <- read_csv(url)
+glimpse(gun)
+```
+
+
+```{r subsetdataload, cache = TRUE, include = FALSE}
+##get subset of dataset
+youth <- gun %>% filter(age <= 65)
+glimpse(youth)
+```
+
+
+```{r subsetsummary, include=FALSE}
+##get subset summary
+summary(youth)
+```
+
+We have data about `r nrow(gun)` individuals killed by guns. Only `r nrow(gun) - nrow(youth)` are older than 65. The distribution of the remainder is shown below:
+
+## Distribution of the age variable from the youth dataset
+```{r youth-dist, echo=FALSE}
+youth %>%
+  ggplot(aes(age))+geom_freqpoly(binwidth=1)
+```
+
+
+## Distribution of youth by race
+```{r race-dist, echo=FALSE}
+youth %>%
+  ggplot(aes(fct_infreq(race)%>%fct_rev()))+geom_bar()+coord_flip()+labs(x="Victim race")
+```
+
+
